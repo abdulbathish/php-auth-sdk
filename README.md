@@ -20,7 +20,9 @@ PHP SDK for MOSIP (Modular Open Source Identity Platform) Authentication Service
 
 ## Installation
 
-### Using Composer
+### Install via Composer (Recommended)
+
+The package is available on [Packagist](https://packagist.org/packages/mosip/php-auth-sdk):
 
 ```bash
 composer require mosip/php-auth-sdk
