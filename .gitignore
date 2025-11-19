@@ -1,0 +1,11 @@
+vendor/
+composer.lock
+*.log
+keys/
+.idea/
+.vscode/
+*.pem
+*.p12
+composer.phar
+authenticator.log
+
