@@ -2,6 +2,14 @@
     "name": "mosip/php-auth-sdk",
     "description": "PHP SDK for MOSIP Authentication",
     "type": "library",
+    "license": "MPL-2.0",
+    "keywords": ["mosip", "authentication", "sdk", "kyc", "otp", "demographic"],
+    "authors": [
+        {
+            "name": "Abdul Bathish",
+            "email": "your-email@example.com"
+        }
+    ],
     "require": {
         "php": ">=7.4",
         "ext-openssl": "*",
