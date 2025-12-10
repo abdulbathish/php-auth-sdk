@@ -66,14 +66,8 @@ return [
     'mosip_auth_server' => [
         'ida_auth_domain_uri' => 'https://api-internal.YOUR_DOMAIN',
         'ida_auth_url' => 'https://api-internal.YOUR_DOMAIN/idauthentication/v1',
-        // SSL Configuration (optional)
         'ssl' => [
-            // Set to false to disable SSL verification (only for staging/dev environments)
-            // Set to true to use system CA bundle (default)
-            // Set to a file path to use a custom CA certificate file
-            'verify' => true, // or false for staging, or '/path/to/cacert.pem' for custom CA
-            // Optional: Path to CA certificate bundle (alternative to verify)
-            // 'cafile' => '/path/to/cacert.pem',
+            'verify' => true, // false for staging, or path to CA cert file
         ],
     ],
     'crypto_encrypt' => [
@@ -100,6 +94,32 @@ return [
 Place your certificate files in the `keys/` directory:
 - `ida.pem` - IDA certificate for encryption
 - `pa.p12` - Partner certificate for signing and decryption
+
+## SSL Configuration
+
+SSL verification is enabled by default. Configure as needed:
+
+```php
+'ssl' => [
+    // Use system CA bundle (default)
+    'verify' => true,
+    
+    // Or use custom CA certificate file
+    'verify' => '/path/to/cacert.pem',
+    
+    // Or disable 
+    'verify' => false,
+],
+```
+
+Example with relative path:
+
+```php
+$configDir = dirname(__FILE__);
+'ssl' => [
+    'verify' => $configDir . '/keys/cacert.pem',
+],
+```
 
 ## Usage
 

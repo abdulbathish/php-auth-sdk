@@ -23,8 +23,8 @@ class RestUtility
         $this->logger = $logger;
         $this->sslConfig = $sslConfig;
         
-        // Configure SSL options for Guzzle client
-        $clientOptions = [];
+        $clientOptions = ['verify' => true];
+        
         if (isset($sslConfig['verify'])) {
             $clientOptions['verify'] = $sslConfig['verify'];
         }
@@ -56,11 +56,6 @@ class RestUtility
                 'cookies' => $cookies,
             ];
             
-            // Add SSL options if not already set at client level
-            if (isset($this->sslConfig['verify']) && !isset($requestOptions['verify'])) {
-                $requestOptions['verify'] = $this->sslConfig['verify'];
-            }
-            
             $response = $this->client->get($serverUrl, $requestOptions);
             return $response;
         } catch (GuzzleException $e) {
@@ -91,11 +86,6 @@ class RestUtility
                 'json' => $data,
                 'cookies' => $cookies,
             ];
-            
-            // Add SSL options if not already set at client level
-            if (isset($this->sslConfig['verify']) && !isset($requestOptions['verify'])) {
-                $requestOptions['verify'] = $this->sslConfig['verify'];
-            }
             
             $response = $this->client->post($serverUrl, $requestOptions);
             return $response;
