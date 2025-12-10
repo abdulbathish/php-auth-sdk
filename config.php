@@ -18,6 +18,15 @@ return [
     'mosip_auth_server' => [
         'ida_auth_domain_uri' => 'https://api-internal.sandbox-mosip.oueg.info',
         'ida_auth_url' => 'https://api-internal.sandbox-mosip.oueg.info/idauthentication/v1',
+        // SSL Configuration (optional)
+        'ssl' => [
+            // Set to false to disable SSL verification (only for staging/dev environments)
+            // Set to true to use system CA bundle (default)
+            // Set to a file path to use a custom CA certificate file
+            'verify' => true, // or false for staging, or '/path/to/cacert.pem' for custom CA
+            // Optional: Path to CA certificate bundle (alternative to verify)
+            // 'cafile' => '/path/to/cacert.pem',
+        ],
     ],
     'crypto_encrypt' => [
         'symmetric_key_size' => 256,

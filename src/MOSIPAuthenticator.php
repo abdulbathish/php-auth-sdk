@@ -37,10 +37,12 @@ class MOSIPAuthenticator
             $this->logger = $logger;
         }
 
+        $sslConfig = $config['mosip_auth_server']['ssl'] ?? [];
         $this->authRestUtil = new RestUtility(
             $config['mosip_auth_server']['ida_auth_url'],
             $config['mosip_auth']['authorization_header_constant'],
-            $this->logger
+            $this->logger,
+            $sslConfig
         );
 
         $this->cryptoUtil = new CryptoUtility(

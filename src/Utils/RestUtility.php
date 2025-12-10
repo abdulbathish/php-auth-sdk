@@ -11,8 +11,9 @@ class RestUtility
     private $requestHeaders;
     private $logger;
     private $client;
+    private $sslConfig;
 
-    public function __construct($authServerUrl, $authorizationHeaderConstant, $logger)
+    public function __construct($authServerUrl, $authorizationHeaderConstant, $logger, $sslConfig = [])
     {
         $this->authServerUrl = $authServerUrl;
         $this->requestHeaders = [
@@ -20,7 +21,24 @@ class RestUtility
             'Content-Type' => 'application/json',
         ];
         $this->logger = $logger;
-        $this->client = new Client();
+        $this->sslConfig = $sslConfig;
+        
+        // Configure SSL options for Guzzle client
+        $clientOptions = [];
+        if (isset($sslConfig['verify'])) {
+            $clientOptions['verify'] = $sslConfig['verify'];
+        }
+        if (isset($sslConfig['cert'])) {
+            $clientOptions['cert'] = $sslConfig['cert'];
+        }
+        if (isset($sslConfig['ssl_key'])) {
+            $clientOptions['ssl_key'] = $sslConfig['ssl_key'];
+        }
+        if (isset($sslConfig['cafile'])) {
+            $clientOptions['verify'] = $sslConfig['cafile'];
+        }
+        
+        $this->client = new Client($clientOptions);
     }
 
     public function getRequest($pathParams = null, $headers = [], $data = null, $cookies = null)
@@ -32,11 +50,18 @@ class RestUtility
         $this->logger->info("Got <GET> Request for URL and Path Params: {$serverUrl}");
 
         try {
-            $response = $this->client->get($serverUrl, [
+            $requestOptions = [
                 'headers' => array_merge($this->requestHeaders, $headers),
                 'json' => $data,
                 'cookies' => $cookies,
-            ]);
+            ];
+            
+            // Add SSL options if not already set at client level
+            if (isset($this->sslConfig['verify']) && !isset($requestOptions['verify'])) {
+                $requestOptions['verify'] = $this->sslConfig['verify'];
+            }
+            
+            $response = $this->client->get($serverUrl, $requestOptions);
             return $response;
         } catch (GuzzleException $e) {
             $this->logger->error("GET Request failed: " . $e->getMessage());
@@ -61,11 +86,18 @@ class RestUtility
         $this->logger->debug("Request Headers = " . json_encode($headers));
 
         try {
-            $response = $this->client->post($serverUrl, [
+            $requestOptions = [
                 'headers' => $headers,
                 'json' => $data,
                 'cookies' => $cookies,
-            ]);
+            ];
+            
+            // Add SSL options if not already set at client level
+            if (isset($this->sslConfig['verify']) && !isset($requestOptions['verify'])) {
+                $requestOptions['verify'] = $this->sslConfig['verify'];
+            }
+            
+            $response = $this->client->post($serverUrl, $requestOptions);
             return $response;
         } catch (GuzzleException $e) {
             $this->logger->error("POST Request failed: " . $e->getMessage());
